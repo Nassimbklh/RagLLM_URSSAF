@@ -1,0 +1,43 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      - QDRANT_ALLOW_CORS=true
+    networks:
+      - rag-network
+
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:v0.6.14
+    ports:
+      - "3332:8080"
+    environment:
+      - DEFAULT_EMBEDDING_MODEL=nomic-ai/nomic-embed-text
+      - OLLAMA_API_BASE_URL=http://host.docker.internal:11434
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_COLLECTION_NAME=documents
+      - ENABLE_SIGNUP=true
+      - WEBUI_SECRET_KEY=a8f62d3b7c9e1f5a4d2e6b8c0a7d9f3e5b2c8a6d4f1e3b7c9a5d2f6e8b0c4a7
+      - CORS_ALLOW_ORIGIN=http://localhost:3332
+    volumes:
+      - openwebui_data:/app/backend/data
+    depends_on:
+      - qdrant
+    networks:
+      - rag-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  qdrant_data:
+    driver: local
+  openwebui_data:
+    driver: local
+
+networks:
+  rag-network:
+    driver: bridge
