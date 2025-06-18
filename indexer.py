@@ -1,5 +1,5 @@
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
-from langchain.text_splitter import TokenTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_ollama.embeddings import OllamaEmbeddings
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
@@ -49,10 +49,12 @@ def index_repository():
     print(f"{len(docs)} pages de documents chargées.")
 
 
-    splitter = TokenTextSplitter(
+    splitter = RecursiveCharacterTextSplitter(
 
         chunk_size=CONFIG["CHUNK_SIZE"],
         chunk_overlap=CONFIG["CHUNK_OVERLAP"],
+        separators=["\n\n", "\n", " ", ""]
+
     )
     chunks = splitter.split_documents(docs)
 
