@@ -53,7 +53,6 @@ def index_repository():
 
         chunk_size=CONFIG["CHUNK_SIZE"],
         chunk_overlap=CONFIG["CHUNK_OVERLAP"],
-        model_name="nomic-embed-text"  # Utiliser un modèle compatible avec Ollama
     )
     chunks = splitter.split_documents(docs)
 
