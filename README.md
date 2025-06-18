@@ -1,130 +1,101 @@
-# RAG System with LangChain, Qdrant, and Ollama
+# Système RAG avec LangChain, Qdrant et Ollama
 
-This is a minimal Retrieval-Augmented Generation (RAG) system that uses:
-- LangChain for orchestration
-- Qdrant for vector storage
-- Ollama for embeddings and local LLM generation
+Ceci est un système minimal de Génération Augmentée par Récupération (RAG) qui utilise :
+- LangChain pour l'orchestration
+- Qdrant pour le stockage vectoriel
+- Ollama pour les embeddings et la génération locale de LLM
 
-## Setup
+## Configuration
 
-### Prerequisites
-- Docker and Docker Compose for running Qdrant
-- Python 3.8+ for running the RAG system
-- Ollama installed locally with the llama3 model and nomic-embed-text model
+### Prérequis
+- Docker et Docker Compose pour exécuter Qdrant
+- Python 3.8+ pour exécuter le système RAG
+- Ollama installé localement avec le modèle llama3 et le modèle nomic-embed-text
 
 ### Installation
 
-1. Clone this repository:
+1. Clonez ce dépôt :
 ```bash
 git clone <repository-url>
 cd test_rag
 ```
 
-2. Install dependencies:
+2. Installez les dépendances :
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Set up your environment variables:
-   - Copy the `.env.example` file to `.env` or use the provided `.env` file
+3. Configurez vos variables d'environnement :
+   - Copiez le fichier `.env.example` vers `.env` ou utilisez le fichier `.env` fourni
 
-4. Start Qdrant using Docker Compose:
+4. Démarrez Qdrant avec Docker Compose :
 ```bash
 docker-compose up -d
 ```
 
-5. Pull the required Ollama models:
+5. Téléchargez les modèles Ollama requis :
 ```bash
 ollama pull llama3:8b-instruct-q4_K_M
 ollama pull nomic-embed-text
 ```
 
-6. Add your PDF documents to the `repository` directory.
+6. Ajoutez vos documents PDF dans le répertoire `repository`.
 
-## Usage
+## Utilisation
 
-### Indexing Documents
+### Indexation des Documents
 
-To index the documents in the repository:
+Pour indexer les documents dans le dépôt :
 
 ```bash
 python main.py index
 ```
 
-This will:
-1. Load all PDF and TXT documents from the `repository` directory
-2. Split them into chunks
-3. Generate embeddings using Ollama (nomic-embed-text model)
-4. Store the embeddings in Qdrant
+Cela va :
+1. Charger tous les documents PDF et TXT du répertoire `repository`
+2. Les diviser en morceaux
+3. Générer des embeddings en utilisant Ollama (modèle nomic-embed-text)
+4. Stocker les embeddings dans Qdrant
 
-### Querying
+### Interrogation
 
-To query the indexed documents:
+Pour interroger les documents indexés :
 
 ```bash
-python main.py query "your question here"
+python main.py query "votre question ici"
 ```
 
-This will:
-1. Convert your question to an embedding
-2. Find the most relevant chunks in Qdrant
-3. Generate a response using Ollama with the context from the retrieved chunks
+Cela va :
+1. Convertir votre question en embedding
+2. Trouver les morceaux les plus pertinents dans Qdrant
+3. Générer une réponse en utilisant Ollama avec le contexte des morceaux récupérés
 
-### Using OpenWebUI with RAG
-
-This project now includes OpenWebUI, a web interface for interacting with Ollama models and the RAG system:
-
-1. Start the Docker Compose setup which includes both Qdrant and OpenWebUI:
-```bash
-docker-compose up -d
-```
-
-2. Make sure Ollama is running on your host machine:
-```bash
-ollama serve
-```
-
-3. Index your documents as described above:
-```bash
-python main.py index
-```
-
-4. Access OpenWebUI in your browser at:
-```
-http://localhost:3000
-```
-
-5. In OpenWebUI:
-   - The interface will automatically connect to your local Ollama instance
-   - The RAG system is pre-configured to use your Qdrant collection
-   - You can ask questions about your documents directly through the chat interface
 
 ## Configuration
 
-You can configure the system by editing the `.env` file:
+Vous pouvez configurer le système en modifiant le fichier `.env` :
 
-- `OLLAMA_BASE_URL`: URL for Ollama (default: http://localhost:11434)
-- `OLLAMA_EMBEDDING_MODEL`: Ollama model to use for embeddings (default: nomic-embed-text)
-- `OLLAMA_GENERATION_MODEL`: Ollama model to use for generation (default: llama3:8b-instruct-q4_K_M)
-- `QDRANT_URL`: URL for Qdrant (default: http://localhost:6333)
-- `QDRANT_COLLECTION_NAME`: Collection name in Qdrant (default: documents)
-- `CHUNK_SIZE`: Size of text chunks (default: 1000)
-- `CHUNK_OVERLAP`: Overlap between chunks (default: 200)
-- `REPOSITORY_PATH`: Path to the document repository (default: repository)
+- `OLLAMA_BASE_URL` : URL pour Ollama (par défaut : http://localhost:11434)
+- `OLLAMA_EMBEDDING_MODEL` : Modèle Ollama à utiliser pour les embeddings (par défaut : nomic-embed-text)
+- `OLLAMA_GENERATION_MODEL` : Modèle Ollama à utiliser pour la génération (par défaut : llama3:8b-instruct-q4_K_M)
+- `QDRANT_URL` : URL pour Qdrant (par défaut : http://localhost:6333)
+- `QDRANT_COLLECTION_NAME` : Nom de la collection dans Qdrant (par défaut : documents)
+- `CHUNK_SIZE` : Taille des morceaux de texte (par défaut : 1000)
+- `CHUNK_OVERLAP` : Chevauchement entre les morceaux (par défaut : 200)
+- `REPOSITORY_PATH` : Chemin vers le dépôt de documents (par défaut : repository)
 
-## Project Structure
+## Structure du Projet
 
-- `main.py`: Command-line interface
-- `indexer.py`: Document loading and indexing
-- `rag.py`: Query processing and response generation
-- `config.py`: Configuration management
-- `docker-compose.yaml`: Docker Compose configuration for Qdrant and OpenWebUI
-- `.env`: Environment variables
-- `repository/`: Directory for storing documents
+- `main.py` : Interface en ligne de commande
+- `indexer.py` : Chargement et indexation des documents
+- `rag.py` : Traitement des requêtes et génération de réponses
+- `config.py` : Gestion de la configuration
+- `docker-compose.yaml` : Configuration Docker Compose pour Qdrant
+- `.env` : Variables d'environnement
+- `repository/` : Répertoire pour stocker les documents
 
-## Components
+## Composants
 
-- **Ollama**: Local LLM server for embeddings and text generation
-- **Qdrant**: Vector database for storing and retrieving document embeddings
-- **LangChain**: Framework for building LLM applications
-- **OpenWebUI**: Web interface for interacting with Ollama and the RAG system
+- **Ollama** : Serveur LLM local pour les embeddings et la génération de texte
+- **Qdrant** : Base de données vectorielle pour stocker et récupérer les embeddings de documents
+- **LangChain** : Framework pour construire des applications LLM

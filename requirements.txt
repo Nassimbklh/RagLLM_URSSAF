@@ -1,10 +1,8 @@
-# Core dependencies
 langchain>=0.1.0
 langchain-community>=0.0.10
 langchain-openai>=0.0.2
 python-dotenv>=1.0.0
-
-# Document processing
+argparse>=1.4.0
 pypdf>=3.15.1
 
 # Vector database
@@ -12,6 +10,3 @@ qdrant-client>=1.6.0
 
 # LLM integration
 ollama>=0.1.5
-
-# Utilities
-argparse>=1.4.0
